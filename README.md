@@ -85,7 +85,9 @@ Additionally, you can find a list of my recommended shell tools [here](https://g
 
 #### Git Bash
 
-Adding profile to Windows Terminal:
+Install Git Bash from [here](https://git-scm.com/downloads).
+
+Add profile to Windows Terminal:
 
 - Name: `Git Bash`
 - Command line: `%PROGRAMFILES%/Git/bin/bash.exe -i -l`
@@ -134,12 +136,12 @@ Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 #### WSL - Ubuntu 22.04 (LTS)
 
-Ubuntu installation steps:
+Install Ubuntu:
 
-1. Set default version of WSL: `wsl --set-default-version 2`.
+1. Set a default version of WSL: `wsl --set-default-version 2`.
 2. Install [Ubuntu 22.04 LTS](https://www.microsoft.com/store/productId/9PN20MSR04DW).
 
-Setup:
+Setup the environment:
 
 1. Start with `sudo apt update` and `sudo apt upgrade`.
 2. Install [Zsh](https://www.zsh.org/), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship).
