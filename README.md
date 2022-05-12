@@ -14,6 +14,9 @@ The applied terminal varies by the host OS:
     - [Git Bash](#git-bash)
     - [PowerShell 7](#powershell-7)
     - [WSL - Ubuntu 22.04 (LTS)](#wsl---ubuntu-2204-lts)
+- [🤖 Termux](#-termux)
+  - [🎨 Appearance](#-appearance-2)
+  - [👨‍💻 Setup](#-setup)
 
 Additionally, you can find my IDE (VS Code) settings [here](https://pawelcislo.com/2021/11/14/my-vs-code-playground/).
 
@@ -151,3 +154,25 @@ Extras:
 
 - Disable beep sound in Windows Terminal settings for the Ubuntu Profile (`Advanced` > `Bell notification style`)
 - If you have installed conda, I suggest to disable printing environment names, as they will be displayed already by Starship: `conda config --set changeps1 False`.
+
+## 🤖 Termux
+
+[Termux](https://termux.com/) - my main terminal for Android installed from [F-Droid](https://f-droid.org/en/packages/com.termux/).
+
+### 🎨 Appearance
+
+![Termux](screenshots/termux.png)
+
+UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obtained from F-Droid):
+
+- Theme: `Dracula`
+- Font: `FiraCode` (JetBrains Mono does not support icons of `exa --icons`)
+- Keyboard: [Gboard](https://play.google.com/store/apps/details?id=com.google.android.inputmethod.latin&hl=en&gl=US)
+
+### 👨‍💻 Setup
+
+1. Start with `apt update` and `apt upgrade`.
+2. Install extra packages: `pkg install git`, `pkg install python` and `pkg install vim`.
+3. Install [Zsh](https://www.zsh.org/), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship).
+4. Copy the [👨‍💻 Zsh settings](#-zsh-settings).
+5. Optionally, install further tools such as [Tool-X](https://github.com/rajkumardusad/Tool-X).
