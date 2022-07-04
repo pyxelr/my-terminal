@@ -62,7 +62,7 @@ External plugins:
 - `alias h="history | grep"` <--- search shell command history using grep
 - `alias lisl="exa -hla --icons"` <--- better `ls` with [exa](https://github.com/ogham/exa)
 - `alias list="exa -hlas time --icons"` <--- better `ls` with [exa](https://github.com/ogham/exa) (ordered by time)
-- `alias tree="br -c :pt"` <--- better `tree` with [broot](https://github.com/Canop/broot)
+- `alias treee="br -c :pt"` <--- better `tree` with [broot](https://github.com/Canop/broot)
 
 Additionally, you can find a list of my recommended shell tools [here](https://github.com/pyxelr/recommendations-for-engineers#shell).
 
