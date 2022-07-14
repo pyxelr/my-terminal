@@ -17,8 +17,13 @@ The applied terminal varies by the host OS:
 - [🤖 Termux](#-termux)
   - [🎨 Appearance](#-appearance-2)
   - [👨‍💻 Setup](#-setup)
+- [🐧 Neovim](#-neovim)
+  - [🎨 Appearance](#-appearance-3)
+  - [👨‍💻 Setup](#-setup-1)
 
-Additionally, you can find my IDE (VS Code) settings [here](https://pawelcislo.com/2021/11/14/my-vs-code-playground/).
+Additionally, I have included my NeoVim (text editor) config which is OS agnostic.
+
+This repo only does not list my IDE (VS Code) settings, which you can find in [this blog post](https://pawelcislo.com/2021/11/14/my-vs-code-playground/).
 
 ## 🍎 iTerm2
 
@@ -171,8 +176,56 @@ UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obt
 
 ### 👨‍💻 Setup
 
-1. Start with `apt update` and `apt upgrade`.
-2. Install extra packages: `pkg install git`, `pkg install python` and `pkg install vim`.
-3. Install [Zsh](https://www.zsh.org/), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship).
-4. Copy the [👨‍💻 Zsh settings](#-zsh-settings).
-5. Optionally, install further tools such as [Tool-X](https://github.com/rajkumardusad/Tool-X).
+1. Install [F-Droid](https://f-droid.org/), and use it to install [Termux](https://f-droid.org/en/packages/com.termux/) with [Termux:Styling](https://github.com/termux/termux-styling).
+2. Open up Termux and start with `apt update` and `apt upgrade`.
+3. Install extra packages: `pkg install git`, `pkg install python` and `pkg install vim`.
+4. Install [Zsh](https://www.zsh.org/), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship).
+5. Copy the [👨‍💻 Zsh settings](#-zsh-settings).
+6. Optionally, install further tools such as [Tool-X](https://github.com/rajkumardusad/Tool-X).
+
+## 🐧 Neovim
+
+[Neovim](https://neovim.io/) - my main text editor used within the terminal of any OS.
+
+### 🎨 Appearance
+
+<img src="screenshots/neovim.png" alt="Neovim" width="1000"/>
+
+- Neovim config: [NvChad](https://nvchad.github.io/)
+- Theme: `chadracula`
+- Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 12
+
+### 👨‍💻 Setup
+
+1. Make sure you have set up the local terminal of your OS (ideally as in this repo).
+2. Follow the installation steps of [Neovim](https://github.com/neovim/neovim/wiki/Installing-Neovim) and [NvChad](https://nvchad.github.io/quickstart/install).
+3. Post installation steps to set up the config files:
+
+    ```bash
+    cd ~/.config/nvim
+    mkdir lua/custom
+    cp examples/init.lua lua/custom/init.lua
+    cp examples/chadrc.lua lua/custom/chadrc.lua
+    ```
+
+4. Edit `~/.config/nvim/lua/custom/chadrc.lua` (apply `chadracula` theme and enable dashboard):
+
+    ```lua
+    local M = {}
+
+    M.ui = {
+      theme = "chadracula",
+    }
+
+    M.plugins = {
+      user = {
+          ["goolord/alpha-nvim"] = {
+            disable = false,
+          },
+      },
+    }
+
+    return M
+    ```
+
+5. Start Neovim with `nvim`.
