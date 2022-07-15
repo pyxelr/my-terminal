@@ -228,4 +228,4 @@ UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obt
     return M
     ```
 
-5. Start Neovim with `nvim`.
+5. Start Neovim with `nvim` and do `:PackerSync`.
