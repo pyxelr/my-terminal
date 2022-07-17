@@ -229,3 +229,4 @@ UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obt
     ```
 
 5. Start Neovim with `nvim` and do `:PackerSync`.
+6. Optionally, apply Neovim in your IDE, such as in VS Code through the [VSCode Neovim](https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim) extension.
