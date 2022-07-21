@@ -228,5 +228,5 @@ UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obt
     return M
     ```
 
-5. Start Neovim with `nvim` and do `:PackerSync`.
+5. Start Neovim with `nvim` and do `:PackerSync`. You can also display the file explorer with `CTRL` + `N`.
 6. Optionally, apply Neovim in your IDE, such as in VS Code through the [VSCode Neovim](https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim) extension.
