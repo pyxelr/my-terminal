@@ -179,7 +179,7 @@ UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obt
 1. Install [F-Droid](https://f-droid.org/), and use it to install [Termux](https://f-droid.org/en/packages/com.termux/) with [Termux:Styling](https://github.com/termux/termux-styling).
 2. Open up Termux and start with `apt update` and `apt upgrade`.
 3. Install extra packages: `pkg install git`, `pkg install python` and `pkg install vim`.
-4. Install [Zsh](https://www.zsh.org/), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship).
+4. Install [Zsh](https://www.zsh.org/) (`pkg install zsh`), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship) (`pkg install starship`).
 5. Copy the [👨‍💻 Zsh settings](#-zsh-settings).
 6. Optionally, install further tools such as [Tool-X](https://github.com/rajkumardusad/Tool-X).
 
