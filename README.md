@@ -7,6 +7,7 @@ The applied terminal varies by the host OS:
   - [👨‍💻 Zsh settings](#-zsh-settings)
     - [Plugins](#plugins)
     - [Shell aliases](#shell-aliases)
+    - [Shell tools](#shell-tools)
 - [🖥 Windows Terminal](#-windows-terminal)
   - [🎨 Appearance](#-appearance-1)
   - [👨‍💻 Profiles](#-profiles)
