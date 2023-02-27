@@ -47,9 +47,13 @@ This repo only does not list my IDE (VS Code) settings, which you can find in [t
 
 Oh My Zsh plugins:
 
+- [aliases](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/aliases)
+- [colored-man-pages](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/colored-man-pages)
+- [common-aliases](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/common-aliases)
 - [docker](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/docker)
 - [dotenv](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/dotenv)
 - [git](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git)
+- [globalias](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/globalias)
 - [kubectl](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl)
 - [pip](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/pip)
 - [poetry](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/poetry)
@@ -64,12 +68,48 @@ External plugins:
 
 #### Shell aliases
 
-- `alias h="history | grep"` ← search shell command history using grep
-- `alias lisl="exa -hla --icons"` ← better `ls` with [exa](https://github.com/ogham/exa)
-- `alias list="exa -hlas time --icons"` ← better `ls` with [exa](https://github.com/ogham/exa) (ordered by time)
-- `alias treee="br -c :pt"` ← better `tree` with [broot](https://github.com/Canop/broot)
+I recommend keeping aliases in the `~/.aliases` file, and then source this file in your respective profile file through `source ~/.aliases`. Keep in mind that a bunch of aliases is already configured through the aforementioned Oh My Zsh plugins, which you can quickly check using the [aliases](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/aliases) plugin.
 
-Additionally, you can find a list of my recommended shell tools [here](https://github.com/pyxelr/recommendations-for-engineers#shell).
+**general**:
+
+- `alias aliases='code ~/.aliases'` ← quickly open `~/.aliases` in VS Code
+- `alias lisl='exa -hla --icons'` ← better `ls` with [exa](https://github.com/ogham/exa)
+- `alias list='exa -hlas time --icons'` ← better `ls` with [exa](https://github.com/ogham/exa) (ordered by time)
+- `alias treee='br -c :pt'` ← better `tree` with [broot](https://github.com/Canop/broot)
+- `alias path='echo -e ${PATH//:/\\n}'` ← show all directories in the PATH variable, one per line
+- `alias ports='netstat -a | grep -i "listen"'` ← show all open ports and the processes using them
+- `alias reload='source ~/.zshrc'` ← reload the configuration file for zsh
+- `alias zshrc='code ~/.zshrc'` ← quickly open `~/.zshrc` in VS Code
+
+**kubernetes**:
+
+- `alias k8s-get-pods='kubectl get pods --all-namespaces'` ← get the list of all pods
+- `alias k8s-get-services='kubectl get services --all-namespaces'` ← get the list of all services
+
+**macOS**:
+- `alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"` ←  find and delete all `.DS_Store` files in the current directory and all subdirectories
+
+**functions**:
+
+- check if a website is up or down:
+
+  ```bash
+  function website-status(){
+    curl -s --head --request GET "$1" | grep "200 OK"
+  }
+  ```
+
+- open finder in the current folder:
+
+  ```bash
+  function openfinder(){
+      open -a Finder "$1";
+  }
+  ```
+
+#### Shell tools
+
+You can find a list of my recommended shell tools in my [other repo](https://github.com/pyxelr/recommendations-for-engineers#shell).
 
 ## 🖥 Windows Terminal
 
