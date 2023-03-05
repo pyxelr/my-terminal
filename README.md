@@ -15,10 +15,10 @@ The applied terminal varies by the host OS:
     - [Git Bash](#git-bash)
     - [PowerShell 7](#powershell-7)
     - [WSL - Ubuntu 22.04 (LTS)](#wsl---ubuntu-2204-lts)
-- [🤖 Termux](#-termux)
+- [🐧 Neovim](#-neovim)
   - [🎨 Appearance](#-appearance-2)
   - [👨‍💻 Setup](#-setup)
-- [🐧 Neovim](#-neovim)
+- [🤖 Termux](#-termux)
   - [🎨 Appearance](#-appearance-3)
   - [👨‍💻 Setup](#-setup-1)
 
@@ -209,29 +209,6 @@ Extras:
 - Disable beep sound in Windows Terminal settings for the Ubuntu Profile (`Advanced` > `Bell notification style`)
 - If you have installed conda, I suggest to disable printing environment names, as they will be displayed already by Starship: `conda config --set changeps1 False`.
 
-## 🤖 Termux
-
-[Termux](https://termux.com/) - my main terminal for Android installed from [F-Droid](https://f-droid.org/en/packages/com.termux/).
-
-### 🎨 Appearance
-
-![Termux](screenshots/termux.png)
-
-UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obtained from F-Droid):
-
-- Theme: `Dracula`
-- Font: `FiraCode` (JetBrains Mono does not support icons of `exa --icons`)
-- Keyboard: [Gboard](https://play.google.com/store/apps/details?id=com.google.android.inputmethod.latin&hl=en&gl=US)
-
-### 👨‍💻 Setup
-
-1. Install [F-Droid](https://f-droid.org/), and use it to install [Termux](https://f-droid.org/en/packages/com.termux/) with [Termux:Styling](https://github.com/termux/termux-styling).
-2. Open up Termux and start with `apt update` and `apt upgrade`.
-3. Install extra packages: `pkg install git`, `pkg install python` and `pkg install vim`.
-4. Install [Zsh](https://www.zsh.org/) (`pkg install zsh`), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship) (`pkg install starship`).
-5. Copy the [👨‍💻 Zsh settings](#-zsh-settings).
-6. Optionally, install further tools such as [Tool-X](https://github.com/rajkumardusad/Tool-X).
-
 ## 🐧 Neovim
 
 [Neovim](https://neovim.io/) - my main text editor used within the terminal of any OS.
@@ -279,3 +256,26 @@ UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obt
 
 5. Start Neovim with `nvim` and do `:PackerSync`. You can also display the file explorer with `CTRL` + `N`.
 6. Optionally, apply Neovim in your IDE, such as in VS Code through the [VSCode Neovim](https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim) extension.
+
+## 🤖 Termux
+
+[Termux](https://termux.com/) - my main terminal for Android installed from [F-Droid](https://f-droid.org/en/packages/com.termux/).
+
+### 🎨 Appearance
+
+![Termux](screenshots/termux.png)
+
+UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obtained from F-Droid):
+
+- Theme: `Dracula`
+- Font: `FiraCode` (JetBrains Mono does not support icons of `exa --icons`)
+- Keyboard: [Gboard](https://play.google.com/store/apps/details?id=com.google.android.inputmethod.latin&hl=en&gl=US)
+
+### 👨‍💻 Setup
+
+1. Install [F-Droid](https://f-droid.org/), and use it to install [Termux](https://f-droid.org/en/packages/com.termux/) with [Termux:Styling](https://github.com/termux/termux-styling).
+2. Open up Termux and start with `apt update` and `apt upgrade`.
+3. Install extra packages: `pkg install git`, `pkg install python` and `pkg install vim`.
+4. Install [Zsh](https://www.zsh.org/) (`pkg install zsh`), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship) (`pkg install starship`).
+5. Copy the [👨‍💻 Zsh settings](#-zsh-settings).
+6. Optionally, install further tools such as [Tool-X](https://github.com/rajkumardusad/Tool-X).
