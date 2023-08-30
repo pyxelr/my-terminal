@@ -8,6 +8,7 @@ The applied terminal varies by the host OS:
     - [Plugins](#plugins)
     - [Shell aliases](#shell-aliases)
     - [Shell tools](#shell-tools)
+  - [✨ Extras](#-extras)
 - [🖥 Windows Terminal](#-windows-terminal)
   - [🎨 Appearance](#-appearance-1)
   - [👨‍💻 Profiles](#-profiles)
@@ -119,6 +120,18 @@ I recommend keeping aliases in the `~/.aliases` file, and then source this file 
 #### Shell tools
 
 You can find a list of my recommended shell tools in my [other repo](https://github.com/pyxelr/recommendations-for-engineers#shell).
+
+### ✨ Extras
+
+Extra iTerm2 configuration:
+
+  1. Jump between words with `⌥` + `←`/`→`
+       - Settings > Profiles > Keys > Key Mappings > +
+         - Keyboard shortcut: `⌥ ←`, Action: `Send Escape Sequence`, Esc+: `b`
+         - Keyboard shortcut: `⌥ →`, Action: `Send Escape Sequence`, Esc+: `f`
+  2. Delete words with `⌥` + `BACKSPACE`
+       - Settings > Profiles > Keys > General
+         - Left and Right option keys: change from `Normal` to `Esc+`
 
 ## 🖥 Windows Terminal
 
