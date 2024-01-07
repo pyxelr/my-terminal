@@ -78,6 +78,9 @@ External plugins:
 
 #### Shell aliases
 
+> [!NOTE]  
+> _Since 2024/01/07, I keep my core text-expansion config in [my-espanso-config](https://github.com/pyxelr/my-espanso-config)._
+
 I recommend keeping aliases in the `~/.aliases` file, and then source this file in your respective profile file through `source ~/.aliases`. Keep in mind that a bunch of aliases is already configured through the aforementioned Oh My Zsh plugins, which you can quickly check using the [aliases](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/aliases) plugin.
 
 **general**:
@@ -105,7 +108,7 @@ I recommend keeping aliases in the `~/.aliases` file, and then source this file 
 
   ```bash
   function website-status(){
-    curl -s --head --request GET "$1" | grep "200 OK"
+    curl -Is "$1" | head -n 1
   }
   ```
 
