@@ -25,7 +25,7 @@ The applied terminal varies by the host OS:
 
 Additionally, I have included my NeoVim (text editor) config which is OS agnostic.
 
-This repo only does not list my IDE (VS Code) settings, which you can find in [this blog post](https://pawelcislo.com/2021/11/14/my-vs-code-playground/).
+This repo only does not list my IDE: [VS Code settings](https://gist.github.com/pyxelr/760dac032d0427377ecc1bb195499d9b).
 
 ## 🍎 iTerm2
 
