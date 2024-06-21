@@ -2,42 +2,42 @@
 
 The applied terminal varies by the host OS:
 
-- [🍎 iTerm2](#-iterm2)
+- [🍎 Warp](#-warp)
   - [🎨 Appearance](#-appearance)
   - [👨‍💻 Zsh settings](#-zsh-settings)
     - [Plugins](#plugins)
     - [Shell aliases](#shell-aliases)
     - [Shell tools](#shell-tools)
+- [🍎 iTerm2](#-iterm2)
+  - [🎨 Appearance](#-appearance-1)
   - [✨ Extras](#-extras)
 - [🖥 Windows Terminal](#-windows-terminal)
-  - [🎨 Appearance](#-appearance-1)
+  - [🎨 Appearance](#-appearance-2)
   - [👨‍💻 Profiles](#-profiles)
     - [Command Prompt](#command-prompt)
     - [Git Bash](#git-bash)
     - [PowerShell 7](#powershell-7)
     - [WSL - Ubuntu 22.04 (LTS)](#wsl---ubuntu-2204-lts)
 - [🐧 Neovim](#-neovim)
-  - [🎨 Appearance](#-appearance-2)
+  - [🎨 Appearance](#-appearance-3)
   - [👨‍💻 Setup](#-setup)
 - [🤖 Termux](#-termux)
-  - [🎨 Appearance](#-appearance-3)
+  - [🎨 Appearance](#-appearance-4)
   - [👨‍💻 Setup](#-setup-1)
 
 Additionally, I have included my NeoVim (text editor) config which is OS agnostic.
 
 This repo only does not list my IDE: [VS Code settings](https://gist.github.com/pyxelr/760dac032d0427377ecc1bb195499d9b).
 
-## 🍎 iTerm2
+## 🍎 Warp
 
-[iTerm2](https://iterm2.com/) - my main terminal for macOS.
+[Warp](https://www.warp.dev/) - my main terminal for macOS.
 
-### 🎨 Appearance
+<img src="screenshots/warp.png" alt="Warp" width="693"/>
 
-<img src="screenshots/iterm2.png" alt="iTerm2" width="637"/>
-
-- Theme: [Dracula PRO](https://draculatheme.com/pro)
-- iTerm2 theme size: `Compact`
-- Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 12
+- Theme: `Fancy Dracula`
+- Prompt: `Shell prompt (PS1)`
+- Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 11
 
 ### 👨‍💻 Zsh settings
 
@@ -86,8 +86,8 @@ I recommend keeping aliases in the `~/.aliases` file, and then source this file 
 **general**:
 
 - `alias aliases='code ~/.aliases'` ← quickly open `~/.aliases` in VS Code
-- `alias lisl='exa -hla --icons'` ← better `ls` with [exa](https://github.com/ogham/exa)
-- `alias list='exa -hlas time --icons'` ← better `ls` with [exa](https://github.com/ogham/exa) (ordered by time)
+- `alias lisl='eza -hla --icons'` ← better `ls` with [eza](https://github.com/eza-community/eza)
+- `alias list='eza -hlas time --icons'` ← better `ls` with [eza](https://github.com/eza-community/eza) (ordered by time)
 - `alias treee='br -c :pt'` ← better `tree` with [broot](https://github.com/Canop/broot)
 - `alias path='echo -e ${PATH//:/\\n}'` ← show all directories in the PATH variable, one per line
 - `alias ports='netstat -a | grep -i "listen"'` ← show all open ports and the processes using them
@@ -123,6 +123,18 @@ I recommend keeping aliases in the `~/.aliases` file, and then source this file 
 #### Shell tools
 
 You can find a list of my recommended shell tools in my [other repo](https://github.com/pyxelr/recommendations-for-engineers#shell).
+
+## 🍎 iTerm2
+
+[iTerm2](https://iterm2.com/) - my alternative terminal for macOS.
+
+### 🎨 Appearance
+
+<img src="screenshots/iterm2.png" alt="iTerm2" width="637"/>
+
+- Theme: [Dracula PRO](https://draculatheme.com/pro)
+- iTerm2 theme size: `Compact`
+- Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 12
 
 ### ✨ Extras
 
@@ -284,7 +296,7 @@ Extras:
 UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obtained from F-Droid):
 
 - Theme: `Dracula`
-- Font: `FiraCode` (JetBrains Mono does not support icons of `exa --icons`)
+- Font: `FiraCode` (JetBrains Mono does not support icons of `eza --icons`)
 - Keyboard: [Gboard](https://play.google.com/store/apps/details?id=com.google.android.inputmethod.latin&hl=en&gl=US)
 
 ### 👨‍💻 Setup
