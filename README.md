@@ -33,6 +33,8 @@ This repo only does not list my IDE: [VS Code settings](https://gist.github.com/
 
 [Warp](https://www.warp.dev/) - my main terminal for macOS.
 
+### 🎨 Appearance
+
 <img src="screenshots/warp.png" alt="Warp" width="693"/>
 
 - Theme: `Fancy Dracula`
