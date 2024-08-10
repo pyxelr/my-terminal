@@ -58,7 +58,6 @@ Oh My Zsh plugins:
 - [copypath](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/copypath)
 - [docker](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/docker)
 - [dotenv](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/dotenv)
-- [fd](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/fd)
 - [fzf](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/fzf)
 - [git](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git)
 - [globalias](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/globalias)
