@@ -51,24 +51,25 @@ This repo only does not list my IDE: [VS Code settings](https://gist.github.com/
 
 Oh My Zsh plugins:
 
-- [aliases](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/aliases)
+- [aws](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/aws)
 - [colored-man-pages](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/colored-man-pages)
-- [common-aliases](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/common-aliases)
 - [copyfile](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/copyfile)
 - [copypath](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/copypath)
 - [docker](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/docker)
+- [docker-compose](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/docker-compose)
 - [dotenv](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/dotenv)
 - [fzf](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/fzf)
 - [git](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git)
 - [globalias](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/globalias)
+- [helm](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/helm)
 - [istioctl](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/istioctl)
 - [jsontools](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/jsontools)
 - [kubectl](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl)
 - [pip](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/pip)
 - [poetry](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/poetry)
 - [python](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/python)
-- [sublime](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/sublime)
 - [sudo](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/sudo)
+- [terraform](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/terraform)
 - [virtualenv](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/virtualenv)
 - [vscode](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/vscode)
 
