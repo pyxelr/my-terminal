@@ -4,7 +4,7 @@ The applied terminal varies by the host OS:
 
 - [🍎 Warp](#-warp)
   - [🎨 Appearance](#-appearance)
-  - [⚙️ Zsh settings](#-zsh-settings)
+  - [⚙️ Zsh settings](#%EF%B8%8F-zsh-settings)
     - [Plugins](#plugins)
     - [Shell aliases](#shell-aliases)
     - [Shell tools](#shell-tools)
@@ -13,17 +13,17 @@ The applied terminal varies by the host OS:
   - [✨ Extras](#-extras)
 - [🖥 Windows Terminal](#-windows-terminal)
   - [🎨 Appearance](#-appearance-2)
-  - [⚙️ Profiles](#-profiles)
+  - [⚙️ Profiles](#%EF%B8%8F-profiles)
     - [Command Prompt](#command-prompt)
     - [Git Bash](#git-bash)
     - [PowerShell 7](#powershell-7)
     - [WSL - Ubuntu 22.04 (LTS)](#wsl---ubuntu-2204-lts)
 - [🐧 Neovim](#-neovim)
   - [🎨 Appearance](#-appearance-3)
-  - [⚙️ Setup](#-setup)
+  - [⚙️ Setup](#%EF%B8%8F-setup)
 - [🤖 Termux](#-termux)
   - [🎨 Appearance](#-appearance-4)
-  - [⚙️ Setup](#-setup-1)
+  - [⚙️ Setup](#%EF%B8%8F-setup-1)
 
 Additionally, I have included my NeoVim (text editor) config which is OS agnostic.
 
