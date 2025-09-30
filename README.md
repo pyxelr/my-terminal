@@ -4,7 +4,7 @@ The applied terminal varies by the host OS:
 
 - [🍎 Warp](#-warp)
   - [🎨 Appearance](#-appearance)
-  - [👨‍💻 Zsh settings](#-zsh-settings)
+  - [⚙️ Zsh settings](#-zsh-settings)
     - [Plugins](#plugins)
     - [Shell aliases](#shell-aliases)
     - [Shell tools](#shell-tools)
@@ -13,17 +13,17 @@ The applied terminal varies by the host OS:
   - [✨ Extras](#-extras)
 - [🖥 Windows Terminal](#-windows-terminal)
   - [🎨 Appearance](#-appearance-2)
-  - [👨‍💻 Profiles](#-profiles)
+  - [⚙️ Profiles](#-profiles)
     - [Command Prompt](#command-prompt)
     - [Git Bash](#git-bash)
     - [PowerShell 7](#powershell-7)
     - [WSL - Ubuntu 22.04 (LTS)](#wsl---ubuntu-2204-lts)
 - [🐧 Neovim](#-neovim)
   - [🎨 Appearance](#-appearance-3)
-  - [👨‍💻 Setup](#-setup)
+  - [⚙️ Setup](#-setup)
 - [🤖 Termux](#-termux)
   - [🎨 Appearance](#-appearance-4)
-  - [👨‍💻 Setup](#-setup-1)
+  - [⚙️ Setup](#-setup-1)
 
 Additionally, I have included my NeoVim (text editor) config which is OS agnostic.
 
@@ -41,7 +41,7 @@ This repo only does not list my IDE: [VS Code settings](https://gist.github.com/
 - Prompt: `Shell prompt (PS1)`
 - Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 11
 
-### 👨‍💻 Zsh settings
+### ⚙️ Zsh settings
 
 - Framework: [Oh My Zsh](https://ohmyz.sh/)
 - Prompt: [Starship](https://starship.rs/)
@@ -162,7 +162,7 @@ Extra iTerm2 configuration:
 - Background opacity: `80%`
 - Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 11
 
-### 👨‍💻 Profiles
+### ⚙️ Profiles
 
 #### Command Prompt
 
@@ -232,7 +232,7 @@ Setup the environment:
 
 1. Start with `sudo apt update` and `sudo apt upgrade`.
 2. Install [Zsh](https://www.zsh.org/), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship).
-3. Copy the [👨‍💻 Zsh settings](#-zsh-settings).
+3. Copy the [⚙️ Zsh settings](#-zsh-settings).
 
 Extras:
 
@@ -251,7 +251,7 @@ Extras:
 - Theme: `chadracula`
 - Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 12
 
-### 👨‍💻 Setup
+### ⚙️ Setup
 
 1. Make sure you have set up the local terminal of your OS (ideally as in this repo).
 2. Follow the installation steps of [Neovim](https://github.com/neovim/neovim/wiki/Installing-Neovim) and [NvChad](https://nvchad.github.io/quickstart/install).
@@ -301,11 +301,11 @@ UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obt
 - Font: `FiraCode` (JetBrains Mono does not support icons of `eza --icons`)
 - Keyboard: [Gboard](https://play.google.com/store/apps/details?id=com.google.android.inputmethod.latin&hl=en&gl=US)
 
-### 👨‍💻 Setup
+### ⚙️ Setup
 
 1. Install [F-Droid](https://f-droid.org/), and use it to install [Termux](https://f-droid.org/en/packages/com.termux/) with [Termux:Styling](https://github.com/termux/termux-styling).
 2. Open up Termux and start with `apt update` and `apt upgrade`.
 3. Install extra packages: `pkg install git`, `pkg install python` and `pkg install vim`.
 4. Install [Zsh](https://www.zsh.org/) (`pkg install zsh`), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship) (`pkg install starship`).
-5. Copy the [👨‍💻 Zsh settings](#-zsh-settings).
+5. Copy the [⚙️ Zsh settings](#-zsh-settings).
 6. Optionally, install further tools such as [Tool-X](https://github.com/rajkumardusad/Tool-X).
