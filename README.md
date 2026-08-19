@@ -247,45 +247,107 @@ Extras:
 
 <img src="screenshots/neovim.png" alt="Neovim" width="1000"/>
 
-- Neovim config: [NvChad](https://nvchad.github.io/)
-- Theme: `chadracula`
+- Neovim config: [LazyVim](https://www.lazyvim.org/)
+- Theme: [`dracula`](https://github.com/Mofiqul/dracula.nvim)
 - Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 12
+
+> This setup used to be [NvChad](https://nvchad.com/) with the `chadracula` theme. I moved to LazyVim because its config layout has stayed stable for years, while NvChad has gone through breaking restructures (v1 → v2 → v2.5) that each required rewriting the config from scratch.
 
 ### ⚙️ Setup
 
 1. Make sure you have set up the local terminal of your OS (ideally as in this repo).
-2. Follow the installation steps of [Neovim](https://github.com/neovim/neovim/wiki/Installing-Neovim) and [NvChad](https://nvchad.github.io/quickstart/install).
-3. Post installation steps to set up the config files:
+2. Install [Neovim](https://github.com/neovim/neovim/blob/master/INSTALL.md) 0.11 or newer (`nvim --version`).
+3. Back up any existing config and install the [LazyVim starter](https://www.lazyvim.org/installation):
 
     ```bash
-    cd ~/.config/nvim
-    mkdir lua/custom
-    cp examples/init.lua lua/custom/init.lua
-    cp examples/chadrc.lua lua/custom/chadrc.lua
+    mv ~/.config/nvim{,.bak}
+    mv ~/.local/share/nvim{,.bak}
+    mv ~/.local/state/nvim{,.bak}
+    mv ~/.cache/nvim{,.bak}
+
+    git clone https://github.com/LazyVim/starter ~/.config/nvim
+    rm -rf ~/.config/nvim/.git
+    rm -f ~/.config/nvim/lua/plugins/example.lua
     ```
 
-4. Edit `~/.config/nvim/lua/custom/chadrc.lua` (apply `chadracula` theme and enable dashboard):
+4. Enable the language support I use, by adding these imports to the `spec` table in `~/.config/nvim/lua/config/lazy.lua`:
 
     ```lua
-    local M = {}
-
-    M.ui = {
-      theme = "chadracula",
-    }
-
-    M.plugins = {
-      user = {
-          ["goolord/alpha-nvim"] = {
-            disable = false,
-          },
-      },
-    }
-
-    return M
+    { import = "lazyvim.plugins.extras.lang.typescript" },
+    { import = "lazyvim.plugins.extras.lang.json" },
+    { import = "lazyvim.plugins.extras.lang.markdown" },
+    { import = "lazyvim.plugins.extras.lang.clangd" },
+    { import = "lazyvim.plugins.extras.formatting.prettier" },
     ```
 
-5. Start Neovim with `nvim` and do `:PackerSync`. You can also display the file explorer with `CTRL` + `N`.
-6. Optionally, apply Neovim in your IDE, such as in VS Code through the [VSCode Neovim](https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim) extension.
+    In the same file, set the fallback colourscheme so the first launch does not flash Tokyo Night:
+
+    ```lua
+    install = { colorscheme = { "dracula", "habamax" } },
+    ```
+
+5. Apply the Dracula theme in `~/.config/nvim/lua/plugins/colorscheme.lua`:
+
+    ```lua
+    return {
+      {
+        "Mofiqul/dracula.nvim",
+        lazy = false,
+        priority = 1000,
+        opts = { italic_comment = true },
+      },
+      {
+        "LazyVim/LazyVim",
+        opts = { colorscheme = "dracula" },
+      },
+    }
+    ```
+
+6. Add the HTML/CSS language servers in `~/.config/nvim/lua/plugins/lsp.lua` (Lua, TypeScript, C and the formatters already come from step 4):
+
+    ```lua
+    return {
+      {
+        "neovim/nvim-lspconfig",
+        opts = { servers = { html = {}, cssls = {} } },
+      },
+      {
+        "nvim-treesitter/nvim-treesitter",
+        opts = { ensure_installed = { "css" } },
+      },
+      {
+        "mason-org/mason.nvim",
+        opts = { ensure_installed = { "html-lsp", "css-lsp" } },
+      },
+    }
+    ```
+
+7. Add `jk` as an escape shortcut in `~/.config/nvim/lua/plugins/editor.lua`:
+
+    ```lua
+    return {
+      {
+        "max397574/better-escape.nvim",
+        event = "InsertEnter",
+        opts = {},
+      },
+    }
+    ```
+
+8. Append my keybindings to `~/.config/nvim/lua/config/keymaps.lua`:
+
+    ```lua
+    local map = vim.keymap.set
+
+    -- Enter command mode without reaching for Shift
+    map("n", ";", ":", { desc = "Enter command mode", nowait = true })
+
+    -- CTRL+N toggles the file explorer
+    map("n", "<C-n>", "<cmd>Neotree toggle<cr>", { desc = "Explorer (toggle)" })
+    ```
+
+9. Start Neovim with `nvim`. lazy.nvim bootstraps itself and installs everything on the first launch. Use `:Lazy` to manage plugins, `:LazyExtras` to browse the other language packs, and `:checkhealth` to confirm the install.
+10. Optionally, apply Neovim in your IDE, such as in VS Code through the [VSCode Neovim](https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim) extension.
 
 ## 🤖 Termux
 
