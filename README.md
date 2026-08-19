@@ -18,14 +18,17 @@ The applied terminal varies by the host OS:
     - [Git Bash](#git-bash)
     - [PowerShell 7](#powershell-7)
     - [WSL - Ubuntu 22.04 (LTS)](#wsl---ubuntu-2204-lts)
-- [🐧 Neovim](#-neovim)
+- [🐑 herdr](#-herdr)
   - [🎨 Appearance](#-appearance-3)
   - [⚙️ Setup](#%EF%B8%8F-setup)
-- [🤖 Termux](#-termux)
+- [🐧 Neovim](#-neovim)
   - [🎨 Appearance](#-appearance-4)
   - [⚙️ Setup](#%EF%B8%8F-setup-1)
+- [🤖 Termux](#-termux)
+  - [🎨 Appearance](#-appearance-5)
+  - [⚙️ Setup](#%EF%B8%8F-setup-2)
 
-Additionally, I have included my NeoVim (text editor) config which is OS agnostic.
+Additionally, I have included my herdr (agent multiplexer) and NeoVim (text editor) configs, which are both OS agnostic.
 
 This repo only does not list my IDE: [VS Code settings](https://gist.github.com/pyxelr/760dac032d0427377ecc1bb195499d9b).
 
@@ -238,6 +241,94 @@ Extras:
 
 - Disable beep sound in Windows Terminal settings for the Ubuntu Profile (`Advanced` > `Bell notification style`)
 - If you have installed conda, I suggest to disable printing environment names, as they will be displayed already by Starship: `conda config --set changeps1 False`.
+
+## 🐑 herdr
+
+[herdr](https://herdr.dev/) - my agent multiplexer, running inside whichever terminal I am on.
+
+### 🎨 Appearance
+
+<img src="screenshots/herdr.png" alt="herdr" width="1000"/>
+
+- Theme: `dracula`
+- Font: inherited from the host terminal, so [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) everywhere
+
+### ⚙️ Setup
+
+1. Install herdr:
+
+    ```bash
+    # macOS / Linux
+    brew install herdr
+
+    # or, without Homebrew
+    curl -fsSL https://herdr.dev/install.sh | sh
+    ```
+
+    On Windows: `irm https://herdr.dev/install.ps1 | iex`.
+
+2. Run `herdr` to create or attach to the persistent session. `CTRL` + `B` is the prefix key, so `CTRL` + `B` then `?` lists every binding, and `CTRL` + `B` then `Q` detaches while leaving the agents running. Use `herdr --session <name>` for a second isolated session, and `herdr --remote <ssh-target>` to attach to a server running on another machine.
+
+3. Apply the Dracula theme in `~/.config/herdr/config.toml`:
+
+    ```toml
+    [theme]
+    name = "dracula"
+    ```
+
+4. Install the plugins I use:
+
+    ```bash
+    # git-aware, read-only file browser in a split pane
+    herdr plugin install smarzban/herdr-file-viewer
+
+    # review agent-written diffs in a sidebar and send line comments back to the agent
+    herdr plugin install persiyanov/herdr-reviewr
+    ```
+
+    Both are bound in `~/.config/herdr/config.toml`:
+
+    ```toml
+    [[keys.command]]
+    key = "prefix+f"
+    type = "plugin_action"
+    command = "herdr-file-viewer.open-file-viewer"
+    description = "open file viewer in split"
+
+    [[keys.command]]
+    key = "prefix+shift+f"
+    type = "plugin_action"
+    command = "herdr-file-viewer.open-file-viewer-tab"
+    description = "open file viewer in tab"
+
+    [[keys.command]]
+    key = "prefix+d"
+    type = "plugin_action"
+    command = "persiyanov.reviewr.toggle"
+    description = "toggle reviewr diff pane"
+    ```
+
+    Config changes are picked up with `herdr server reload-config`, or `CTRL` + `B` then `SHIFT` + `R`.
+
+    reviewr keeps its own config in `~/.config/herdr/plugins/config/persiyanov.reviewr/config.toml`, which it re-reads on every refresh:
+
+    ```toml
+    theme = "dracula"
+    default_scope = "branch"
+    ```
+
+    `branch` diffs against the merge-base with the default branch, so a review still shows the agent's work once it has been committed. The default `uncommitted` scope only covers the working tree.
+
+5. Optionally, wire up the agent CLIs you use: `herdr integration install claude`. Run `herdr integration` to see the rest (`codex`, `cursor`, `copilot`, `opencode`, `grok`, and more).
+
+6. Optionally, add Zsh completions:
+
+    ```bash
+    mkdir -p ~/.zfunc
+    herdr completion zsh > ~/.zfunc/_herdr
+    ```
+
+    Then add `fpath=(~/.zfunc $fpath)` to `~/.zshrc`, above the line that sources Oh My Zsh.
 
 ## 🐧 Neovim
 
