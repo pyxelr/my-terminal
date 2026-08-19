@@ -339,7 +339,7 @@ Extras:
 <img src="screenshots/neovim.png" alt="Neovim" width="1000"/>
 
 - Neovim config: [LazyVim](https://www.lazyvim.org/)
-- Theme: [`dracula`](https://github.com/Mofiqul/dracula.nvim)
+- Theme: [`dracula`](https://github.com/AndresYague/dracula.nvim)
 - Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 12
 
 > This setup used to be [NvChad](https://nvchad.com/) with the `chadracula` theme. I moved to LazyVim because its config layout has stayed stable for years, while NvChad has gone through breaking restructures (v1 → v2 → v2.5) that each required rewriting the config from scratch.
@@ -382,10 +382,15 @@ Extras:
     ```lua
     return {
       {
-        "Mofiqul/dracula.nvim",
+        "AndresYague/dracula.nvim",
         lazy = false,
         priority = 1000,
-        opts = { italic_comment = true },
+        opts = {
+          style = "default", -- "default" | "soft" | "day"
+          styles = {
+            comments = { italic = true },
+          },
+        },
       },
       {
         "LazyVim/LazyVim",
