@@ -450,7 +450,81 @@ Extras:
     }
     ```
 
-8. Append my keybindings to `~/.config/nvim/lua/config/keymaps.lua`:
+8. Add [diffview.nvim](https://github.com/sindrets/diffview.nvim) in `~/.config/nvim/lua/plugins/git.lua`. LazyVim's gitsigns already covers single-file hunks, while this gives a file panel and a side-by-side view over a whole changeset, which is how I review what a coding agent wrote:
+
+    ```lua
+    return {
+      {
+        "sindrets/diffview.nvim",
+        cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory", "DiffviewToggleFiles" },
+        keys = {
+          { "<leader>gv", "<cmd>DiffviewOpen<cr>", desc = "Diffview (working tree)" },
+          { "<leader>gV", "<cmd>DiffviewFileHistory %<cr>", desc = "Diffview (file history)" },
+          {
+            -- Everything on this branch, committed work included. The working-tree
+            -- view above goes blank once an agent has committed its changes.
+            "<leader>gm",
+            function()
+              local base = vim.trim(vim.fn.system("git symbolic-ref --quiet --short refs/remotes/origin/HEAD"))
+              if vim.v.shell_error ~= 0 or base == "" then
+                base = "origin/main"
+              end
+              vim.cmd("DiffviewOpen " .. base .. "...HEAD")
+            end,
+            desc = "Diffview (vs base branch)",
+          },
+        },
+        opts = {
+          enhanced_diff_hl = true,
+          view = {
+            -- 3-way merge conflicts are easier to read with the base shown.
+            merge_tool = { layout = "diff3_mixed" },
+          },
+          keymaps = {
+            view = { { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview" } } },
+            file_panel = { { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview" } } },
+            file_history_panel = { { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview" } } },
+          },
+        },
+      },
+    }
+    ```
+
+    `q` closes any of the panels. Note that `:DiffviewOpen <rev>` with a single revision compares the working tree *against* that revision, so a branch passed on its own shows its additions as removals. The `base...branch` range is the one that matches what a merge request displays.
+
+9. Optionally, if you use GitLab, add a `:MR <id>` command at the top of that same `git.lua`, above the `return`. It asks [glab](https://gitlab.com/gitlab-org/cli) for the merge request's branches, fetches them, and opens the range in the right order, so reviewing an MR needs no checkout and no typing out refs:
+
+    ```lua
+    vim.api.nvim_create_user_command("MR", function(opts)
+      local id = opts.args
+      local raw = vim.fn.system({ "glab", "mr", "view", id, "--output", "json" })
+      if vim.v.shell_error ~= 0 then
+        return vim.notify("glab failed for MR " .. id .. ":\n" .. raw, vim.log.levels.ERROR)
+      end
+      local ok, mr = pcall(vim.json.decode, raw)
+      if not ok or not mr.source_branch then
+        return vim.notify("Could not read branches for MR " .. id, vim.log.levels.ERROR)
+      end
+      vim.notify(("MR !%s: %s <- %s"):format(id, mr.target_branch, mr.source_branch))
+      vim.fn.system({ "git", "fetch", "origin", mr.source_branch, mr.target_branch })
+      vim.cmd(("DiffviewOpen origin/%s...origin/%s"):format(mr.target_branch, mr.source_branch))
+    end, { nargs = 1, desc = "Diffview for a GitLab merge request" })
+    ```
+
+10. Reload files that changed outside Neovim, in `~/.config/nvim/lua/config/autocmds.lua`. LazyVim only does this on `FocusGained`, which a [herdr](#-herdr) pane switch does not always produce, so a file an agent rewrote in another pane can stay stale:
+
+    ```lua
+    vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "BufEnter" }, {
+      group = vim.api.nvim_create_augroup("checktime_on_idle", { clear = true }),
+      callback = function()
+        if vim.o.buftype == "" and vim.fn.mode() == "n" then
+          vim.cmd("silent! checktime")
+        end
+      end,
+    })
+    ```
+
+11. Append my keybindings to `~/.config/nvim/lua/config/keymaps.lua`:
 
     ```lua
     local map = vim.keymap.set
@@ -464,8 +538,8 @@ Extras:
     end, { desc = "Explorer (root dir)" })
     ```
 
-9. Start Neovim with `nvim`. lazy.nvim bootstraps itself and installs everything on the first launch. Use `:Lazy` to manage plugins, `:LazyExtras` to browse the other language packs, and `:checkhealth` to confirm the install.
-10. Optionally, apply Neovim in your IDE, such as in VS Code through the [VSCode Neovim](https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim) extension.
+12. Start Neovim with `nvim`. lazy.nvim bootstraps itself and installs everything on the first launch. Use `:Lazy` to manage plugins, `:LazyExtras` to browse the other language packs, and `:checkhealth` to confirm the install.
+13. Optionally, apply Neovim in your IDE, such as in VS Code through the [VSCode Neovim](https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim) extension.
 
 ## 🤖 Termux
 
