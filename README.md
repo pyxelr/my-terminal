@@ -2,6 +2,7 @@
 
 The applied terminal varies by the host OS:
 
+- [🔣 Nerd Fonts](#-nerd-fonts)
 - [🍎 Warp](#-warp)
   - [🎨 Appearance](#-appearance)
   - [⚙️ Zsh settings](#%EF%B8%8F-zsh-settings)
@@ -32,6 +33,25 @@ Additionally, I have included my herdr (agent multiplexer) and NeoVim (text edit
 
 This repo only does not list my IDE: [VS Code settings](https://gist.github.com/pyxelr/760dac032d0427377ecc1bb195499d9b).
 
+## 🔣 Nerd Fonts
+
+Every terminal here uses `JetBrainsMono Nerd Font Mono`, which is [JetBrains Mono](https://www.jetbrains.com/lp/mono/) patched by [Nerd Fonts](https://www.nerdfonts.com/). The unpatched font carries no icon glyphs.
+
+It has to be **v3 or newer**. v3 moved the Material Design icons to `U+F0000+`, which is where current tools look for them: Neovim's file explorer, `eza --icons`, yazi, lazygit.
+
+```bash
+brew install --cask font-jetbrains-mono-nerd-font
+```
+
+> [!WARNING]
+> Remove any v2 build you installed earlier, rather than leaving both. v2 files are named `... Nerd Font Complete ....ttf` and declare the same family name as v3, so macOS may keep resolving to the old one and the new glyphs never appear:
+>
+> ```bash
+> ls ~/Library/Fonts | grep Complete
+> ```
+>
+> Move those out of `~/Library/Fonts`, then fully quit and reopen the terminal. Warp is where this bites hardest, since it has [no font fallback](https://github.com/warpdotdev/Warp/issues/789) and draws only what the selected font provides. iTerm2 falls back to another installed font and hides the problem, so check its profile still points at a font that exists.
+
 ## 🍎 Warp
 
 [Warp](https://www.warp.dev/) - my main terminal for macOS.
@@ -42,7 +62,7 @@ This repo only does not list my IDE: [VS Code settings](https://gist.github.com/
 
 - Theme: `Fancy Dracula`
 - Prompt: `Shell prompt (PS1)`
-- Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 11
+- Font: `JetBrainsMono Nerd Font Mono` 12 (see [🔣 Nerd Fonts](#-nerd-fonts))
 
 ### ⚙️ Zsh settings
 
@@ -139,7 +159,7 @@ You can find a list of my recommended shell tools in my [other repo](https://git
 
 - Theme: [Dracula PRO](https://draculatheme.com/pro)
 - iTerm2 theme size: `Compact`
-- Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 12
+- Font: `JetBrainsMono Nerd Font Mono` 12 (see [🔣 Nerd Fonts](#-nerd-fonts))
 
 ### ✨ Extras
 
@@ -163,7 +183,7 @@ Extra iTerm2 configuration:
 
 - Theme: [Dracula PRO](https://draculatheme.com/pro) (with `"brightBlack": "#8F89B4"` as I have reasoned [here](https://github.com/dracula/dracula-theme/discussions/715))
 - Background opacity: `80%`
-- Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 11
+- Font: `JetBrainsMono Nerd Font Mono` 11 (see [🔣 Nerd Fonts](#-nerd-fonts))
 
 ### ⚙️ Profiles
 
@@ -251,7 +271,7 @@ Extras:
 <img src="screenshots/herdr.png" alt="herdr" width="1000"/>
 
 - Theme: `dracula`
-- Font: inherited from the host terminal, so [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) everywhere
+- Font: inherited from the host terminal, so `JetBrainsMono Nerd Font Mono` everywhere
 
 ### ⚙️ Setup
 
@@ -340,7 +360,7 @@ Extras:
 
 - Neovim config: [LazyVim](https://www.lazyvim.org/)
 - Theme: [`dracula`](https://github.com/AndresYague/dracula.nvim)
-- Font: [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 12
+- Font: `JetBrainsMono Nerd Font Mono` 12, and it has to be [Nerd Fonts](#-nerd-fonts) v3 or newer, otherwise the file explorer renders without icons
 
 > This setup used to be [NvChad](https://nvchad.com/) with the `chadracula` theme. I moved to LazyVim because its config layout has stayed stable for years, while NvChad has gone through breaking restructures (v1 → v2 → v2.5) that each required rewriting the config from scratch.
 
@@ -438,8 +458,10 @@ Extras:
     -- Enter command mode without reaching for Shift
     map("n", ";", ":", { desc = "Enter command mode", nowait = true })
 
-    -- CTRL+N toggles the file explorer
-    map("n", "<C-n>", "<cmd>Neotree toggle<cr>", { desc = "Explorer (toggle)" })
+    -- CTRL+N opens the file explorer (LazyVim ships the snacks explorer, not neo-tree)
+    map("n", "<C-n>", function()
+      Snacks.explorer({ cwd = LazyVim.root() })
+    end, { desc = "Explorer (root dir)" })
     ```
 
 9. Start Neovim with `nvim`. lazy.nvim bootstraps itself and installs everything on the first launch. Use `:Lazy` to manage plugins, `:LazyExtras` to browse the other language packs, and `:checkhealth` to confirm the install.
