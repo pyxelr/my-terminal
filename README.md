@@ -237,7 +237,7 @@ Setup the environment:
 
 1. Start with `sudo apt update` and `sudo apt upgrade`.
 2. Install [Zsh](https://www.zsh.org/), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship).
-3. Copy the [⚙️ Zsh settings](#-zsh-settings).
+3. Copy the [⚙️ Zsh settings](#%EF%B8%8F-zsh-settings).
 
 Extras:
 
@@ -264,7 +264,7 @@ UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obt
 2. Open up Termux and start with `apt update` and `apt upgrade`.
 3. Install extra packages: `pkg install git`, `pkg install python` and `pkg install vim`.
 4. Install [Zsh](https://www.zsh.org/) (`pkg install zsh`), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship) (`pkg install starship`).
-5. Copy the [⚙️ Zsh settings](#-zsh-settings).
+5. Copy the [⚙️ Zsh settings](#%EF%B8%8F-zsh-settings).
 6. Optionally, install further tools such as [Tool-X](https://github.com/rajkumardusad/Tool-X).
 
 ## 🧩 Extra setup
