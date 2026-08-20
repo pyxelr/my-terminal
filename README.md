@@ -2,7 +2,6 @@
 
 The applied terminal varies by the host OS:
 
-- [🔣 Nerd Fonts](#-nerd-fonts)
 - [🍎 Warp](#-warp)
   - [🎨 Appearance](#-appearance)
   - [⚙️ Zsh settings](#%EF%B8%8F-zsh-settings)
@@ -19,38 +18,21 @@ The applied terminal varies by the host OS:
     - [Git Bash](#git-bash)
     - [PowerShell 7](#powershell-7)
     - [WSL - Ubuntu 22.04 (LTS)](#wsl---ubuntu-2204-lts)
-- [🐑 herdr](#-herdr)
+- [🤖 Termux](#-termux)
   - [🎨 Appearance](#-appearance-3)
   - [⚙️ Setup](#%EF%B8%8F-setup)
-- [🐧 Neovim](#-neovim)
-  - [🎨 Appearance](#-appearance-4)
-  - [⚙️ Setup](#%EF%B8%8F-setup-1)
-- [🤖 Termux](#-termux)
-  - [🎨 Appearance](#-appearance-5)
-  - [⚙️ Setup](#%EF%B8%8F-setup-2)
+- [🧩 Extra setup](#-extra-setup)
+  - [🔣 Nerd Fonts](#-nerd-fonts)
+  - [🐑 herdr](#-herdr)
+    - [🎨 Appearance](#-appearance-4)
+    - [⚙️ Setup](#%EF%B8%8F-setup-1)
+  - [🐧 Neovim](#-neovim)
+    - [🎨 Appearance](#-appearance-5)
+    - [⚙️ Setup](#%EF%B8%8F-setup-2)
 
-Additionally, I have included my herdr (agent multiplexer) and NeoVim (text editor) configs, which are both OS agnostic.
+Additionally, the [🧩 Extra setup](#-extra-setup) covers what I run on top of the terminal itself: Nerd Fonts, herdr (agent multiplexer) and NeoVim (text editor).
 
 This repo only does not list my IDE: [VS Code settings](https://gist.github.com/pyxelr/760dac032d0427377ecc1bb195499d9b).
-
-## 🔣 Nerd Fonts
-
-Every terminal here uses `JetBrainsMono Nerd Font Mono`, which is [JetBrains Mono](https://www.jetbrains.com/lp/mono/) patched by [Nerd Fonts](https://www.nerdfonts.com/). The unpatched font carries no icon glyphs.
-
-It has to be **v3 or newer**. v3 moved the Material Design icons to `U+F0000+`, which is where current tools look for them: Neovim's file explorer, `eza --icons`, yazi, lazygit.
-
-```bash
-brew install --cask font-jetbrains-mono-nerd-font
-```
-
-> [!WARNING]
-> Remove any v2 build you installed earlier, rather than leaving both. v2 files are named `... Nerd Font Complete ....ttf` and declare the same family name as v3, so macOS may keep resolving to the old one and the new glyphs never appear:
->
-> ```bash
-> ls ~/Library/Fonts | grep Complete
-> ```
->
-> Move those out of `~/Library/Fonts`, then fully quit and reopen the terminal. Warp is where this bites hardest, since it has [no font fallback](https://github.com/warpdotdev/Warp/issues/789) and draws only what the selected font provides. iTerm2 falls back to another installed font and hides the problem, so check its profile still points at a font that exists.
 
 ## 🍎 Warp
 
@@ -262,18 +244,64 @@ Extras:
 - Disable beep sound in Windows Terminal settings for the Ubuntu Profile (`Advanced` > `Bell notification style`)
 - If you have installed conda, I suggest to disable printing environment names, as they will be displayed already by Starship: `conda config --set changeps1 False`.
 
-## 🐑 herdr
+## 🤖 Termux
+
+[Termux](https://termux.com/) - my main terminal for Android installed from [F-Droid](https://f-droid.org/en/packages/com.termux/).
+
+### 🎨 Appearance
+
+![Termux](screenshots/termux.png)
+
+UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obtained from F-Droid):
+
+- Theme: `Dracula`
+- Font: `FiraCode` (JetBrains Mono does not support icons of `eza --icons`)
+- Keyboard: [Gboard](https://play.google.com/store/apps/details?id=com.google.android.inputmethod.latin&hl=en&gl=US)
+
+### ⚙️ Setup
+
+1. Install [F-Droid](https://f-droid.org/), and use it to install [Termux](https://f-droid.org/en/packages/com.termux/) with [Termux:Styling](https://github.com/termux/termux-styling).
+2. Open up Termux and start with `apt update` and `apt upgrade`.
+3. Install extra packages: `pkg install git`, `pkg install python` and `pkg install vim`.
+4. Install [Zsh](https://www.zsh.org/) (`pkg install zsh`), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship) (`pkg install starship`).
+5. Copy the [⚙️ Zsh settings](#-zsh-settings).
+6. Optionally, install further tools such as [Tool-X](https://github.com/rajkumardusad/Tool-X).
+
+## 🧩 Extra setup
+
+Layers that sit on top of whichever terminal I am in, so they are OS agnostic.
+
+### 🔣 Nerd Fonts
+
+Every terminal here uses `JetBrainsMono Nerd Font Mono`, which is [JetBrains Mono](https://www.jetbrains.com/lp/mono/) patched by [Nerd Fonts](https://www.nerdfonts.com/). The unpatched font carries no icon glyphs.
+
+It has to be **v3 or newer**. v3 moved the Material Design icons to `U+F0000+`, which is where current tools look for them: Neovim's file explorer, `eza --icons`, yazi, lazygit.
+
+```bash
+brew install --cask font-jetbrains-mono-nerd-font
+```
+
+> [!WARNING]
+> Remove any v2 build you installed earlier, rather than leaving both. v2 files are named `... Nerd Font Complete ....ttf` and declare the same family name as v3, so macOS may keep resolving to the old one and the new glyphs never appear:
+>
+> ```bash
+> ls ~/Library/Fonts | grep Complete
+> ```
+>
+> Move those out of `~/Library/Fonts`, then fully quit and reopen the terminal. Warp is where this bites hardest, since it has [no font fallback](https://github.com/warpdotdev/Warp/issues/789) and draws only what the selected font provides. iTerm2 falls back to another installed font and hides the problem, so check its profile still points at a font that exists.
+
+### 🐑 herdr
 
 [herdr](https://herdr.dev/) - my agent multiplexer, running inside whichever terminal I am on.
 
-### 🎨 Appearance
+#### 🎨 Appearance
 
 <img src="screenshots/herdr.png" alt="herdr" width="1000"/>
 
 - Theme: `dracula`
 - Font: inherited from the host terminal, so `JetBrainsMono Nerd Font Mono` everywhere
 
-### ⚙️ Setup
+#### ⚙️ Setup
 
 1. Install herdr:
 
@@ -350,11 +378,11 @@ Extras:
 
     Then add `fpath=(~/.zfunc $fpath)` to `~/.zshrc`, above the line that sources Oh My Zsh.
 
-## 🐧 Neovim
+### 🐧 Neovim
 
 [Neovim](https://neovim.io/) - my main text editor used within the terminal of any OS.
 
-### 🎨 Appearance
+#### 🎨 Appearance
 
 <img src="screenshots/neovim.png" alt="Neovim" width="1000"/>
 
@@ -364,7 +392,7 @@ Extras:
 
 > This setup used to be [NvChad](https://nvchad.com/) with the `chadracula` theme. I moved to LazyVim because its config layout has stayed stable for years, while NvChad has gone through breaking restructures (v1 → v2 → v2.5) that each required rewriting the config from scratch.
 
-### ⚙️ Setup
+#### ⚙️ Setup
 
 1. Make sure you have set up the local terminal of your OS (ideally as in this repo).
 2. Install [Neovim](https://github.com/neovim/neovim/blob/master/INSTALL.md) 0.11 or newer (`nvim --version`).
@@ -540,26 +568,3 @@ Extras:
 
 12. Start Neovim with `nvim`. lazy.nvim bootstraps itself and installs everything on the first launch. Use `:Lazy` to manage plugins, `:LazyExtras` to browse the other language packs, and `:checkhealth` to confirm the install.
 13. Optionally, apply Neovim in your IDE, such as in VS Code through the [VSCode Neovim](https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim) extension.
-
-## 🤖 Termux
-
-[Termux](https://termux.com/) - my main terminal for Android installed from [F-Droid](https://f-droid.org/en/packages/com.termux/).
-
-### 🎨 Appearance
-
-![Termux](screenshots/termux.png)
-
-UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obtained from F-Droid):
-
-- Theme: `Dracula`
-- Font: `FiraCode` (JetBrains Mono does not support icons of `eza --icons`)
-- Keyboard: [Gboard](https://play.google.com/store/apps/details?id=com.google.android.inputmethod.latin&hl=en&gl=US)
-
-### ⚙️ Setup
-
-1. Install [F-Droid](https://f-droid.org/), and use it to install [Termux](https://f-droid.org/en/packages/com.termux/) with [Termux:Styling](https://github.com/termux/termux-styling).
-2. Open up Termux and start with `apt update` and `apt upgrade`.
-3. Install extra packages: `pkg install git`, `pkg install python` and `pkg install vim`.
-4. Install [Zsh](https://www.zsh.org/) (`pkg install zsh`), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship) (`pkg install starship`).
-5. Copy the [⚙️ Zsh settings](#-zsh-settings).
-6. Optionally, install further tools such as [Tool-X](https://github.com/rajkumardusad/Tool-X).
