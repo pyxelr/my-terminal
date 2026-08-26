@@ -265,7 +265,7 @@ UI modified with [Termux:Styling](https://github.com/termux/termux-styling) (obt
 3. Install extra packages: `pkg install git`, `pkg install python` and `pkg install vim`.
 4. Install [Zsh](https://www.zsh.org/) (`pkg install zsh`), [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) and [Starship](https://github.com/starship/starship) (`pkg install starship`).
 5. Copy the [⚙️ Zsh settings](#%EF%B8%8F-zsh-settings).
-6. Optionally, install further tools such as [Tool-X](https://github.com/rajkumardusad/Tool-X).
+6. Optionally, install further tools such as [Tool-X](https://github.com/trmxvibs/Tool-X).
 
 ## 🧩 Extra setup
 
