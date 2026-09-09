@@ -2,49 +2,49 @@
 
 The applied terminal varies by the host OS:
 
-- [🍎 Warp](#-warp)
+- [🍎 Ghostty](#-ghostty)
   - [🎨 Appearance](#-appearance)
   - [⚙️ Zsh settings](#%EF%B8%8F-zsh-settings)
     - [Plugins](#plugins)
     - [Shell aliases](#shell-aliases)
     - [Shell tools](#shell-tools)
-- [🍎 iTerm2](#-iterm2)
-  - [🎨 Appearance](#-appearance-1)
-  - [✨ Extras](#-extras)
 - [🖥 Windows Terminal](#-windows-terminal)
-  - [🎨 Appearance](#-appearance-2)
+  - [🎨 Appearance](#-appearance-1)
   - [⚙️ Profiles](#%EF%B8%8F-profiles)
     - [Command Prompt](#command-prompt)
     - [Git Bash](#git-bash)
     - [PowerShell 7](#powershell-7)
     - [WSL - Ubuntu 22.04 (LTS)](#wsl---ubuntu-2204-lts)
 - [🤖 Termux](#-termux)
-  - [🎨 Appearance](#-appearance-3)
+  - [🎨 Appearance](#-appearance-2)
   - [⚙️ Setup](#%EF%B8%8F-setup)
 - [🧩 Extra setup](#-extra-setup)
   - [🔣 Nerd Fonts](#-nerd-fonts)
   - [🐑 herdr](#-herdr)
-    - [🎨 Appearance](#-appearance-4)
+    - [🎨 Appearance](#-appearance-3)
     - [⚙️ Setup](#%EF%B8%8F-setup-1)
   - [🐧 Neovim](#-neovim)
-    - [🎨 Appearance](#-appearance-5)
+    - [🎨 Appearance](#-appearance-4)
     - [⚙️ Setup](#%EF%B8%8F-setup-2)
 
 Additionally, the [🧩 Extra setup](#-extra-setup) covers what I run on top of the terminal itself: Nerd Fonts, herdr (agent multiplexer) and NeoVim (text editor).
 
-This repo only does not list my IDE: [VS Code settings](https://gist.github.com/pyxelr/760dac032d0427377ecc1bb195499d9b).
+> [!IMPORTANT]  
+> _The config behind everything below lives in [`dotfiles/`](dotfiles/), so you can copy it rather than retype it._
 
-## 🍎 Warp
+> [!NOTE]  
+> _My graphical editors live outside this repo: [VS Code](https://pawelcislo.com/knowledge/software/vs-code/) as my IDE and [Zed](https://pawelcislo.com/knowledge/software/zed/) as my text editor._
 
-[Warp](https://www.warp.dev/) - my main terminal for macOS.
+## 🍎 Ghostty
+
+[Ghostty](https://ghostty.org/) - my main terminal for macOS.
 
 ### 🎨 Appearance
 
-<img src="screenshots/warp.png" alt="Warp" width="693"/>
+<img src="screenshots/ghostty.png" alt="Ghostty" width="632"/>
 
-- Theme: `Fancy Dracula`
-- Prompt: `Shell prompt (PS1)`
-- Font: `JetBrainsMono Nerd Font Mono` 12 (see [🔣 Nerd Fonts](#-nerd-fonts))
+- Theme: `Dracula`
+- Font: `JetBrainsMono Nerd Font Mono` 11 (see [🔣 Nerd Fonts](#-nerd-fonts))
 
 ### ⚙️ Zsh settings
 
@@ -130,30 +130,6 @@ I recommend keeping aliases in the `~/.aliases` file, and then source this file 
 #### Shell tools
 
 You can find a list of my recommended shell tools in my [other repo](https://github.com/pyxelr/recommendations-for-engineers#shell).
-
-## 🍎 iTerm2
-
-[iTerm2](https://iterm2.com/) - my alternative terminal for macOS.
-
-### 🎨 Appearance
-
-<img src="screenshots/iterm2.png" alt="iTerm2" width="637"/>
-
-- Theme: [Dracula PRO](https://draculatheme.com/pro)
-- iTerm2 theme size: `Compact`
-- Font: `JetBrainsMono Nerd Font Mono` 12 (see [🔣 Nerd Fonts](#-nerd-fonts))
-
-### ✨ Extras
-
-Extra iTerm2 configuration:
-
-  1. Jump between words with `⌥` + `←`/`→`
-       - Settings > Profiles > Keys > Key Mappings > +
-         - Keyboard shortcut: `⌥ ←`, Action: `Send Escape Sequence`, Esc+: `b`
-         - Keyboard shortcut: `⌥ →`, Action: `Send Escape Sequence`, Esc+: `f`
-  2. Delete words with `⌥` + `BACKSPACE`
-       - Settings > Profiles > Keys > General
-         - Left and Right option keys: change from `Normal` to `Esc+`
 
 ## 🖥 Windows Terminal
 
@@ -275,7 +251,7 @@ Layers that sit on top of whichever terminal I am in, so they are OS agnostic.
 
 Every terminal here uses `JetBrainsMono Nerd Font Mono`, which is [JetBrains Mono](https://www.jetbrains.com/lp/mono/) patched by [Nerd Fonts](https://www.nerdfonts.com/). The unpatched font carries no icon glyphs.
 
-It has to be **v3 or newer**. v3 moved the Material Design icons to `U+F0000+`, which is where current tools look for them: Neovim's file explorer, `eza --icons`, yazi, lazygit.
+It has to be **v3 or newer**. v3 moved the Material Design icons to `U+F0000+`, which is where current tools look for them: Neovim's [file explorer](https://github.com/folke/snacks.nvim), [`eza --icons`](https://github.com/eza-community/eza), [yazi](https://github.com/sxyazi/yazi), [lazygit](https://github.com/jesseduffield/lazygit).
 
 ```bash
 brew install --cask font-jetbrains-mono-nerd-font
@@ -288,7 +264,7 @@ brew install --cask font-jetbrains-mono-nerd-font
 > ls ~/Library/Fonts | grep Complete
 > ```
 >
-> Move those out of `~/Library/Fonts`, then fully quit and reopen the terminal. Warp is where this bites hardest, since it has [no font fallback](https://github.com/warpdotdev/Warp/issues/789) and draws only what the selected font provides. iTerm2 falls back to another installed font and hides the problem, so check its profile still points at a font that exists.
+> Move those out of `~/Library/Fonts`, then fully quit and reopen the terminal. Ghostty searches other installed fonts for glyphs the selected family lacks, so a stale font setting hides itself instead of showing boxes: check that `font-family` still names something `ghostty +list-fonts` reports.
 
 ### 🐑 herdr
 
@@ -300,6 +276,7 @@ brew install --cask font-jetbrains-mono-nerd-font
 
 - Theme: `dracula`
 - Font: inherited from the host terminal, so `JetBrainsMono Nerd Font Mono` everywhere
+- The right pane above is [lazygit](https://github.com/jesseduffield/lazygit), which I keep open in its own herdr pane for reviewing diffs, staging hunks and stepping through history without leaving the terminal
 
 #### ⚙️ Setup
 

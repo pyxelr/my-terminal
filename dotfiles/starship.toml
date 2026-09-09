@@ -1,0 +1,26 @@
+# Disable the package module, hiding it from the prompt completely
+# [package]
+# disabled = true
+
+# Change order
+format = "$directory $aws $kubernetes $all"
+
+[kubernetes]
+format = '[☸ $context](dimmed green) '
+disabled = false
+
+[[kubernetes.contexts]]
+context_pattern = '.*sandbox.*'
+context_alias = 'sandbox'
+
+[[kubernetes.contexts]]
+context_pattern = '.*dev.*'
+context_alias = 'dev'
+
+[[kubernetes.contexts]]
+context_pattern = '.*staging.*'
+context_alias = 'staging'
+
+[[kubernetes.contexts]]
+context_pattern = '.*prod.*'
+context_alias = 'prod'

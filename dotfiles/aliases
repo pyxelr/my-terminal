@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+# ================================================ #
+#        Custom aliases sourced in ~/.zshrc        #
+# ================================================ #
+
+## general
+alias aliases='code ~/.aliases'
+alias cd='z'
+alias lisl='eza -hla --icons'
+alias list='eza -hlas time --icons'
+alias treee='br -c :pt'
+alias path='echo -e ${PATH//:/\\n}'
+alias ports='netstat -a | grep -i "listen"'
+alias reload='source ~/.zshrc'
+alias zshrc='code ~/.zshrc'
+
+## docker
+alias docker='podman'
+
+## kubernetes
+alias k8s-get-pods='kubectl get pods --all-namespaces'
+alias k8s-get-services='kubectl get services --all-namespaces'
+
+## macOS
+alias cleanup="find . -type f -name '*.DS_Store' -ls -delete" # delete all .DS_STORE in current dir and subdirs
+
+## requiring packages
+# https://github.com/andornaut/keylight
+alias kon='keylight --host <keylight-ip> --on'
+alias koff='keylight --host <keylight-ip> --off'
+
+## functions
+
+### check if a website is up or down
+function website-status(){
+  curl -Is "$1" | head -n 1
+}
+
+### open finder in the current folder
+function openfinder(){
+    open -a Finder "$1";
+}
