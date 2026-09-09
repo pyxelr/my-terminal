@@ -141,25 +141,28 @@ source $ZSH/oh-my-zsh.sh
 # PYTHON #
 # ------ #
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+# Deferred: `conda shell.zsh hook` starts a Python interpreter (~700ms), so it
+# loads on first use instead. Re-running `conda init` will overwrite this.
+conda() {
+    unset -f conda
+    __conda_setup="$("$HOME/miniconda3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
+    if [ $? -eq 0 ]; then
+        eval "$__conda_setup"
+    elif [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
         . "$HOME/miniconda3/etc/profile.d/conda.sh"
     else
         export PATH="$HOME/miniconda3/bin:$PATH"
     fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+    unset __conda_setup
+    conda "$@"
+}
 
 # set up pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+# --no-rehash skips regenerating every shim on each shell start. Run
+# `pyenv rehash` after installing a version or a package with an entry point.
+eval "$(pyenv init - --no-rehash)"
 
 # set up openssl
 export PATH="/opt/homebrew/opt/openssl@3/bin:$PATH"
@@ -200,7 +203,16 @@ export XDG_CONFIG_HOME=$HOME/.config
 export DOCKER_HOST="unix://$HOME/.local/share/containers/podman/machine/podman.sock"
 
 export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# --no-use skips nvm's startup version resolution. On its own that leaves node
+# off PATH, so the default version's bin is added below; `nvm use` still
+# switches whenever a project needs another version.
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use  # This loads nvm
+if [[ -r "$NVM_DIR/alias/default" ]]; then
+    __nvm_default="$(<"$NVM_DIR/alias/default")"
+    __nvm_bin=("$NVM_DIR/versions/node/v${__nvm_default#v}"*/bin(N))
+    [[ -n "$__nvm_bin" ]] && export PATH="${__nvm_bin[1]}:$PATH"
+    unset __nvm_default __nvm_bin
+fi
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # set up zoxide (must be initialized last so its shell hooks aren't clobbered)
