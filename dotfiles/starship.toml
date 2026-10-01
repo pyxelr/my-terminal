@@ -24,3 +24,8 @@ context_alias = 'staging'
 [[kubernetes.contexts]]
 context_pattern = '.*prod.*'
 context_alias = 'prod'
+
+# Use python3: bare `python` is the x86_64 python.org 2.7, which runs under
+# Rosetta and can exceed command_timeout on cold start
+[python]
+python_binary = ["python3"]
