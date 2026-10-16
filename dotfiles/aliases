@@ -15,6 +15,10 @@ alias ports='netstat -a | grep -i "listen"'
 alias reload='source ~/.zshrc'
 alias zshrc='code ~/.zshrc'
 
+## claude code
+alias d='cdiff' # diff of the repo Claude Code edited last; replaces oh-my-zsh's `d`, use `dirs -v` for the directory stack
+alias dif='cdiff'
+
 ## docker
 alias docker='podman'
 

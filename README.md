@@ -342,7 +342,11 @@ brew install --cask font-jetbrains-mono-nerd-font
     default_scope = "branch"
     ```
 
-    `branch` diffs against the merge-base with the default branch, so a review still shows the agent's work once it has been committed. The default `uncommitted` scope only covers the working tree.
+    `branch` diffs against the merge-base with the default branch, so a review still shows the agent's work once it has been committed. The default `uncommitted` scope only covers the working tree (press `u` to switch to it), and `last turn` only works when an agent runs inside that repo's own herdr workspace.
+
+    To open reviewr on whichever repo Claude Code edited last, from any directory, a `PostToolUse` hook records the git root of each edited file and `cdiff` (also `d` or `dif`) opens reviewr there. The hook and its `settings.json` entry are in [dotfiles](dotfiles/README.md#claude-code-hook), the function is at the end of [`zshrc`](dotfiles/zshrc), and the `d` and `dif` aliases are in [`aliases`](dotfiles/aliases).
+
+    Once open, reviewr stays open and updates as the agent edits files (it re-reads the changed files, per its README), but it stays on the repo it was opened on, so run `cdiff` again when the agent moves to another repo. Claude Code's built-in `/diff` and lazygit behave differently: they only see the repo of the directory they were started in, and show nothing when the agent edits files elsewhere.
 
 5. Optionally, wire up the agent CLIs you use: `herdr integration install claude`. Run `herdr integration` to see the rest (`codex`, `cursor`, `copilot`, `opencode`, `grok`, and more).
 
