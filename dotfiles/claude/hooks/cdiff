@@ -1,0 +1,301 @@
+#!/bin/bash
+# cdiff: open the diff of what Claude Code edited, from any directory.
+# Fed by ~/.claude/hooks/last-edited-repo.sh (PreToolUse snapshots, PostToolUse registry,
+# UserPromptSubmit prompt numbers).
+#   cdiff           the most recent edit: a git repo opens in herdr-reviewr, a non-git file in delta
+#   cdiff <n>       the n-th most recent edit, numbered as in --list (cdiff 1 = cdiff)
+#   cdiff <n> <k>   a note's change from the k-th most recent prompt that touched it (1 = last prompt)
+#   cdiff <n> -l    list those prompts, newest first
+#   cdiff -l        pick from recent edits with fzf: enter opens, ctrl-p picks a prompt, ctrl-r
+#                   resets the note's baseline, ctrl-x removes the row, esc quits (q returns to the list)
+#   cdiff rm <n>    remove edit n (as numbered in --list) from the list; "cdiff rm all" clears it
+#   cdiff reset <n> make a note's current content its new baseline, so the next diff shows only
+#   (or: cdiff r)   what changes from now on ("cdiff reset all" does every note)
+#   cdiff --list    print recent edits
+#   cdiff <path>    a git repo (or a path inside one), or a snapshotted file
+
+dir=${CLAUDE_EDITS_DIR:-$HOME/.cache/claude-edits}
+reg=$dir/registry.tsv
+
+snapshot_of() {
+  local h
+  h=$(printf %s "$1" | shasum | cut -c1-16)
+  ls -dt "$dir"/snapshots/*/"$h" 2>/dev/null | head -1
+}
+
+rows() {
+  [ -s "$reg" ] || return 0
+  sort -t$'\t' -k4,4nr "$reg" | while IFS=$'\t' read -r kind target count ts sid; do
+    case $kind in
+      git) [ -e "$target/.git" ] || continue ;;
+      file) [ -e "$target" ] && [ -n "$(snapshot_of "$target")" ] || continue ;;
+      *) continue ;;
+    esac
+    printf '%s\t%s\t%s\t%s\t%s\n' "$kind" "$target" "$count" "$ts" "$sid"
+  done
+}
+
+fmt() {
+  awk -F'\t' -v now="$(date +%s)" -v home="$HOME" '{
+    t = $2; if (index(t, home) == 1) t = "~" substr(t, length(home) + 1)
+    a = now - $4
+    u = a < 3600 ? int(a / 60) "m" : (a < 86400 ? int(a / 3600) "h" : int(a / 86400) "d")
+    printf "%s\t%s\t%-5s %-56s %4s %-5s %4s ago  %s\n", $1, $2, ($1 == "git" ? "repo" : "note"), t, $3, ($3 == 1 ? "edit" : "edits"), u, substr($5, 1, 8)
+  }'
+}
+
+# remove entries from the registry only (files and snapshots are left alone; an entry comes
+# back if Claude edits that file again)
+forget() {
+  local lock=$dir/.lock tmp
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    mkdir "$lock" 2>/dev/null && break
+    sleep 0.1
+  done
+  tmp=$(mktemp "$dir/reg.XXXXXX") || { rmdir "$lock" 2>/dev/null; return 1; }
+  if [ "$1" = --all ]; then
+    : >"$tmp"
+  else
+    awk -F'\t' -v OFS='\t' -v k="$1" -v t="$2" '!($1 == k && $2 == t)' "$reg" >"$tmp"
+  fi
+  mv "$tmp" "$reg"
+  rmdir "$lock" 2>/dev/null
+}
+
+confirm() {  # confirm <-y|""> <question>
+  [ "${1:-}" = -y ] && return 0
+  [ -t 0 ] || { echo "cdiff: needs a terminal (or -y)" >&2; return 1; }
+  read -r -p "cdiff: $2 [y/N] " ans
+  [ "$ans" = y ] || [ "$ans" = Y ]
+}
+
+# a note's baseline is the snapshot taken before its first edit; resetting copies the file's
+# current content over it (git repos have no baseline of ours, git keeps that)
+reset_baseline() {
+  local f=$1 s
+  s=$(snapshot_of "$f")
+  [ -n "$s" ] || { echo "cdiff: no snapshot of $f" >&2; return 1; }
+  [ -e "$f" ] || { echo "cdiff: $f no longer exists" >&2; return 1; }
+  cp -p "$f" "$s/content" && rm -f "$s/new" && touch "$s"
+}
+
+# render <before> <after> <name> <heading>: diff of two versions in delta (or less);
+# returns 2 when they are identical
+render() {
+  local paging=never
+  diff -q "$1" "$2" >/dev/null 2>&1 && return 2
+  [ -t 1 ] && paging=always
+  if command -v delta >/dev/null; then
+    { echo "$4"; diff -u --label "a$3" --label "b$3" "$1" "$2"; } | delta --paging="$paging"
+  elif [ "$paging" = always ]; then
+    { echo "$4"; diff -u --label "a$3" --label "b$3" "$1" "$2"; } | less -R
+  else
+    { echo "$4"; diff -u --label "a$3" --label "b$3" "$1" "$2"; }
+  fi
+  return 0
+}
+
+show_file() {
+  local f=$1 s snap rc
+  s=$(snapshot_of "$f")
+  [ -n "$s" ] || { echo "cdiff: no snapshot of $f" >&2; return 1; }
+  if [ -e "$s/new" ]; then snap=/dev/null; else snap=$s/content; fi
+  render "$snap" "$f" "$f" "since the baseline (before the first edit in the session, or your last reset)"
+  rc=$?
+  [ $rc -eq 2 ] && echo "cdiff: $f is unchanged since its baseline"
+  return 0
+}
+
+clock() { [ -n "$1" ] || { echo '--:--'; return; }; date -r "$1" +%H:%M 2>/dev/null || date -d "@$1" +%H:%M 2>/dev/null || echo '--:--'; }
+
+# the prompts that touched a note, newest first: k <TAB> version file <TAB> "HH:MM  start of the prompt"
+prompt_rows() {
+  local s i=0 v turn ep label
+  s=$(snapshot_of "$1")
+  [ -n "$s" ] || return 0
+  for v in "$s"/t[0-9]*; do [ -e "$v" ] && echo "${v##*/}"; done | sort -r | while IFS= read -r v; do
+    i=$((i + 1))
+    turn=${v#t}
+    turn=$((10#${turn%.new}))
+    IFS=$'\t' read -r _ ep label < <(awk -F'\t' -v n="$turn" '$1 == n' "$(dirname "$s")/turns.tsv" 2>/dev/null)
+    printf '%s\t%s\t%s  %s\n' "$i" "$v" "$(clock "$ep")" "${label:-(no label)}"
+  done
+}
+
+# show_effect <file> <k>: what the k-th most recent prompt that touched the note changed
+show_effect() {
+  local f=$1 k=$2 s vs total i before after b a heading rc
+  s=$(snapshot_of "$f")
+  [ -n "$s" ] || { echo "cdiff: no snapshot of $f" >&2; return 1; }
+  vs=$(for v in "$s"/t[0-9]*; do [ -e "$v" ] && echo "${v##*/}"; done | sort)
+  total=$(printf '%s\n' "$vs" | grep -c .)
+  [ "$total" -gt 0 ] || { echo "cdiff: no prompt history for $f yet" >&2; return 1; }
+  { [ "$k" -ge 1 ] && [ "$k" -le "$total" ]; } || { echo "cdiff: $f has history for $total prompt(s), not $k" >&2; return 1; }
+  i=$((total - k + 1))
+  before=$(printf '%s\n' "$vs" | sed -n "${i}p")
+  after=$(printf '%s\n' "$vs" | sed -n "$((i + 1))p")
+  if [[ $before == *.new ]]; then b=/dev/null; else b=$s/$before; fi
+  if [ -z "$after" ]; then
+    [ -e "$f" ] || { echo "cdiff: $f no longer exists" >&2; return 1; }
+    a=$f
+  elif [[ $after == *.new ]]; then
+    a=/dev/null
+  else
+    a=$s/$after
+  fi
+  heading=$(prompt_rows "$f" | awk -F'\t' -v k="$k" '$1 == k { print $3 }')
+  render "$b" "$a" "$f" "change from prompt $k back: $heading"
+  rc=$?
+  [ $rc -eq 2 ] && echo "cdiff: that prompt left $f unchanged"
+  return 0
+}
+
+# second picker level: choose which prompt's change to show
+pick_prompt() {
+  local list sel
+  list=$(prompt_rows "$1")
+  [ -n "$list" ] || { echo "cdiff: no prompt history for this note yet" >&2; sleep 1.5; return 0; }
+  sel=$(printf '%s\n' "$list" | fzf --delimiter $'\t' --with-nth 1,3 --prompt 'prompt> ' --height 40% --reverse \
+    --header 'enter: show what that prompt changed, esc: back') || return 0
+  [ -n "$sel" ] || return 0
+  show_effect "$1" "${sel%%$'\t'*}"
+}
+
+open_entry() {
+  case $1 in
+    git) herdr-reviewr "$2" ;;
+    file) show_file "$2" ;;
+  esac
+}
+
+# a number picks the n-th most recent edit, as numbered by --list (a real path with that name wins);
+# a second argument selects a prompt of a note: <k> shows its change, -l lists them
+if [[ ${1:-} =~ ^[0-9]+$ ]] && [ ! -e "$1" ]; then
+  first=$(rows | sed -n "${1}p")
+  [ -n "$first" ] || { echo "cdiff: no edit number $1 (see cdiff --list)" >&2; exit 1; }
+  IFS=$'\t' read -r kind target _ <<<"$first"
+  case ${2:-} in
+    '') open_entry "$kind" "$target"; exit 0 ;;
+    -l | [0-9]*)
+      [ "$kind" = file ] || { echo "cdiff: prompt history is kept for notes outside git (git has its own)" >&2; exit 1; }
+      if [ "$2" = -l ]; then
+        list=$(prompt_rows "$target")
+        [ -n "$list" ] || { echo "cdiff: no prompt history for this note yet" >&2; exit 1; }
+        printf '%s\n' "$list" | awk -F'\t' '{ printf "%2d  %s\n", $1, $3 }'
+        exit 0
+      fi
+      [[ $2 =~ ^[0-9]+$ ]] || { echo "usage: cdiff <n> [<k> | -l]" >&2; exit 1; }
+      show_effect "$target" "$2"
+      exit $?
+      ;;
+    *) echo "usage: cdiff <n> [<k> | -l]" >&2; exit 1 ;;
+  esac
+fi
+
+case ${1:-} in
+  -h | --help)
+    awk 'NR > 1 && /^#/ { sub(/^# ?/, ""); print; next } NR > 1 { exit }' "$0"
+    ;;
+  --list)
+    rows | fmt | cut -f3- | awk '{ printf "%2d  %s\n", NR, $0 }'
+    ;;
+  -l | --pick)
+    command -v fzf >/dev/null || { echo "cdiff: fzf is needed for -l" >&2; exit 1; }
+    # fzf exits before the viewer starts (full-screen viewers such as herdr-reviewr hang when started
+    # from inside fzf), then the picker reopens on the same row with a fresh list
+    pos=1
+    while :; do
+      list=$(rows | fmt)
+      [ -n "$list" ] || { echo "cdiff: nothing in the list" >&2; exit 0; }
+      out=$(printf '%s\n' "$list" | fzf --delimiter $'\t' --with-nth 3 --prompt 'cdiff> ' --height 40% --reverse \
+        --expect ctrl-x,ctrl-r,ctrl-p --header 'enter: open, ctrl-p: prompts, ctrl-r: reset baseline, ctrl-x: remove, esc: quit' \
+        --bind "load:pos($pos)") || exit 0
+      key=$(printf '%s\n' "$out" | sed -n 1p)
+      sel=$(printf '%s\n' "$out" | sed -n 2p)
+      [ -n "$sel" ] || exit 0
+      IFS=$'\t' read -r kind target _ <<<"$sel"
+      pos=$(printf '%s\n' "$list" | awk -F'\t' -v t="$target" '$2 == t { print NR; exit }')
+      case $key in
+        ctrl-x) forget "$kind" "$target" ;;
+        ctrl-p)
+          if [ "$kind" = file ]; then
+            pick_prompt "$target"
+          else
+            echo "cdiff: prompt history is kept for notes outside git (git has its own)" >&2
+            sleep 1.5
+          fi
+          ;;
+        ctrl-r)
+          if [ "$kind" = file ]; then
+            reset_baseline "$target" || sleep 1
+          else
+            echo "cdiff: a git repo has no baseline here, git keeps it (commit or stage to move it)" >&2
+            sleep 1.5
+          fi
+          ;;
+        *) open_entry "$kind" "$target" ;;
+      esac
+    done
+    ;;
+  rm)
+    case ${2:-} in
+      all)
+        n=$(rows | wc -l | tr -d ' ')
+        confirm "${3:-}" "clear all $n entries from the list?" || { echo "cancelled"; exit 1; }
+        forget --all
+        echo "cleared $n entries"
+        ;;
+      '' | *[!0-9]*)
+        echo "usage: cdiff rm <n> | cdiff rm all" >&2
+        exit 1
+        ;;
+      *)
+        row=$(rows | sed -n "${2}p")
+        [ -n "$row" ] || { echo "cdiff: no edit number $2 (see cdiff --list)" >&2; exit 1; }
+        IFS=$'\t' read -r kind target _ <<<"$row"
+        forget "$kind" "$target"
+        echo "removed: $target"
+        ;;
+    esac
+    ;;
+  reset | r)
+    case ${2:-} in
+      all)
+        files=$(rows | awk -F'\t' '$1 == "file" { print $2 }')
+        n=$(printf '%s\n' "$files" | grep -c .)
+        confirm "${3:-}" "reset the baseline of $n notes?" || { echo "cancelled"; exit 1; }
+        printf '%s\n' "$files" | while IFS= read -r f; do [ -n "$f" ] && reset_baseline "$f"; done
+        echo "reset $n baselines"
+        ;;
+      '' | *[!0-9]*)
+        echo "usage: cdiff reset <n> | cdiff reset all (r for short)" >&2
+        exit 1
+        ;;
+      *)
+        row=$(rows | sed -n "${2}p")
+        [ -n "$row" ] || { echo "cdiff: no edit number $2 (see cdiff --list)" >&2; exit 1; }
+        IFS=$'\t' read -r kind target _ <<<"$row"
+        [ "$kind" = file ] || { echo "cdiff: a git repo has no baseline here, git keeps it (commit or stage to move it)" >&2; exit 1; }
+        reset_baseline "$target" && echo "baseline reset: $target"
+        ;;
+    esac
+    ;;
+  "")
+    first=$(rows | head -1)
+    [ -n "$first" ] || { echo "cdiff: nothing recorded yet - let Claude edit a file first" >&2; exit 1; }
+    IFS=$'\t' read -r kind target _ <<<"$first"
+    open_entry "$kind" "$target"
+    ;;
+  *)
+    p=$1
+    if [ -d "$p" ]; then
+      root=$(git -C "$p" rev-parse --show-toplevel 2>/dev/null) || { echo "cdiff: $p is not in a git repo" >&2; exit 1; }
+      open_entry git "$root"
+    elif [ -e "$p" ]; then
+      show_file "$(cd "$(dirname "$p")" && pwd -P)/$(basename "$p")"
+    else
+      echo "cdiff: $p does not exist" >&2
+      exit 1
+    fi
+    ;;
+esac

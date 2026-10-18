@@ -229,13 +229,7 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # `zsh -c` that Claude Code actually uses for nested runs, so dropping it here is safe.
 unset CLAUDE_CODE_CHILD_SESSION
 
-# Open the diff viewer on the repo Claude last edited (written by the
-# ~/.claude/hooks/last-edited-repo.sh PostToolUse hook), from any directory.
-# The `d` and `dif` aliases for it live in ~/.aliases.
-cdiff() {
-  local repo
-  repo=$(cat ~/.cache/claude-last-repo 2>/dev/null)
-  [ -n "$repo" ] || { echo "cdiff: no repo recorded yet - let Claude edit a file in a git repo first" >&2; return 1; }
-  [ -d "$repo" ] || { echo "cdiff: recorded repo no longer exists ($repo) - let Claude edit a file in a git repo" >&2; return 1; }
-  herdr-reviewr "$repo"
-}
+# Open the diff of what Claude Code edited, from any directory: a git repo in herdr-reviewr, a
+# non-git file (e.g. an Obsidian note) in delta. `cdiff -l` picks from recent edits.
+# Fed by the ~/.claude/hooks/last-edited-repo.sh hook; the `d` and `dif` aliases live in ~/.aliases.
+cdiff() { ~/.claude/hooks/cdiff "$@"; }
